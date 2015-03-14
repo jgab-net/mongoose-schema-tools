@@ -1,0 +1,11 @@
+{
+  "name": "mongoose-schema-tools",
+  "version": "1.0.0",
+  "description": "mongoose set of tools for manipulating data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "eloytoro",
+  "license": "ISC"
+}
