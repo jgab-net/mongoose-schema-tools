@@ -18,19 +18,17 @@ exports.flatten = function (val) {
 
 /*
  * var MySchema = new Schema({...});
- * MySchema.methods.assign = require('mongoose-schema-tools').assign(MySchema);
+ * MySchema.methods.assign = require('mongoose-schema-tools').assign;
  */
-exports.assign = function (schema) {
-    return function (source) {
-        source = exports.flatten(source);
-        for (var key in source) {
-            if (key.split('.').reverse()[0] !== '_id') {
-                var attr = schema.path(key),
-                if (attr &&
-                    attr.options.select !== false &&
-                    !attr.options.readonly)
-                    this[key] = source[key];
-            }
+exports.assign = function (source) {
+    source = exports.flatten(source);
+    for (var key in source) {
+        if (key.split('.').reverse()[0] !== '_id') {
+            var attr = this.schema.path(key),
+            if (attr &&
+                attr.options.select !== false &&
+                !attr.options.readonly)
+            this[key] = source[key];
         }
-    };
+    }
 };
