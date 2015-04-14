@@ -1,11 +1,11 @@
 /*
  * flatten({ a: 1, b: { c: 2, d: { e: 3 } } }) -> { a: 1, 'b.c': 2, 'b.d.e': 3 }
  */
-exports.flatten = function (val) {
+var flatten = exports.flatten = function (val) {
     var acc = {};
     for (var key in val) {
         if (val[key] instanceof Object) {
-            var subset = exports.flatten(val[key]);
+            var subset = flatten(val[key]);
             for (var subkey in subset) {
                 acc[key + '.' + subkey] = subset[subkey];
             }
@@ -21,10 +21,10 @@ exports.flatten = function (val) {
  * MySchema.methods.assign = require('mongoose-schema-tools').assign;
  */
 exports.assign = function (source) {
-    source = exports.flatten(source);
+    source = flatten(source);
     for (var key in source) {
         if (key.split('.').reverse()[0] !== '_id') {
-            var attr = this.schema.path(key),
+            var attr = this.schema.path(key);
             if (attr &&
                 attr.options.select !== false &&
                 !attr.options.readonly)
