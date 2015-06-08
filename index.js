@@ -22,17 +22,14 @@ var flatten = exports.flatten = function (val) {
  * MySchema.plugin(tools);
  */
 
-module.exports = exports = function lastModifiedPlugin (schema, options) {
-
+module.exports.plugin = exports.plugin = function (schema, options) {
     schema.methods.assign = function (source) {
         source = flatten(source);
         for (var key in source) {
-            if (key.split('.').reverse()[0] !== '_id') {
+            if (!/^([^\.]\.)*_id$/.test(key)) {
                 var attr = this.schema.path(key);
-                if (attr &&
-                    attr.options.select !== false &&
-                    !attr.options.readonly)
-                    this[key] = source[key];
+                if (attr && !attr.options.readonly)
+                    this.set(key, source[key]);
             }
         }
     };
