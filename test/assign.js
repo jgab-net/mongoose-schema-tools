@@ -10,6 +10,9 @@ describe('assigns a source object to a target doc', function () {
             prop2: String,
             prop3: Boolean,
             prop4: Schema.Types.ObjectId,
+            outerProp: {
+                innerProp: Number
+            },
             arrOfProps: [{
                 nestedProp: Number
             }]
@@ -27,24 +30,21 @@ describe('assigns a source object to a target doc', function () {
             }]
         });
 
-        var boilerplate = testDoc.toObject();
-
-        boilerplate.arrOfProps[0].nestedProp = 1;
-        boilerplate.arrOfProps[1].nestedProp = 2;
-        boilerplate.arrOfProps[2].nestedProp = 0;
+        var boilerplate = {
+            prop1: 1,
+            prop3: true,
+            outerProp: {
+                innerProp: 3
+            }
+        };
 
         testDoc.assign({
             _id: new Schema.Types.ObjectId,
             prop1: 1,
             prop3: true,
-            arrOfProps: [{
-                _id: new Schema.Types.ObjectId,
-                nestedProp: 1
-            }, {
-                nestedProp: 2
-            }, {
-                _id: new Schema.Types.ObjectId,
-            }]
+            outerProp: {
+                innerProp: 3
+            }
         });
 
         var testObj = testDoc.toObject();
