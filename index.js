@@ -10,9 +10,9 @@ module.exports = function (schema) {
         var doc = this;
         source = module.exports.flatten(source);
         schema.eachPath(function (path, def) {
-            var isReadonly = !/^([^\.]\.)*_id$/.test(path) &&
+            var isReadable = !/^([^\.]\.)*_+\w+$/.test(path) &&
                 !def.options.readonly;
-            if (isReadonly) {
+            if (isReadable) {
                 doc.set(path, source[path]);
             }
         });

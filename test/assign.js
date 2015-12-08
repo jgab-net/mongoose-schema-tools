@@ -11,6 +11,7 @@ describe('assigns a source object to a target doc', function () {
             prop3: Boolean,
             prop4: Schema.Types.ObjectId,
             prop5: { type: String, readonly: true, default: 'no' },
+            _hidden: String,
             outerProp: {
                 innerProp: Number
             },
@@ -33,6 +34,7 @@ describe('assigns a source object to a target doc', function () {
             _id: new Schema.Types.ObjectId,
             prop1: 1,
             prop3: true,
+            _hidden: 'hey',
             outerProp: {
                 innerProp: 3
             }
@@ -75,6 +77,7 @@ describe('assigns a source object to a target doc', function () {
 
             var testObj = testDoc.toObject();
 
+            testObj.should.not.have.property('_hidden');
             testObj.should.have.properties(expected);
         }
     });
