@@ -5,38 +5,17 @@
  *
  * @param {Object} schema
  */
+var _ = require('lodash');
+var PROTECTED_REGEXP = /^([^\.]*\.)*_/;
+
 module.exports = function (schema) {
     schema.methods.assign = function (source) {
         var doc = this;
-        source = module.exports.flatten(source);
         schema.eachPath(function (path, def) {
-            var isReadable = !/^([^\.]\.)*_+\w+$/.test(path) &&
-                !def.options.readonly;
-            if (isReadable) {
-                doc.set(path, source[path]);
-            }
+            var isProtected = PROTECTED_REGEXP.test(path);
+            if (!_.has(source, path) || def.options.readonly || isProtected)
+                return;
+            doc.set(path, _.get(source, path));
         });
     };
-};
-
-/**
-* flatten
-*
-* @param {Object} val a js native object that resembles a mongoose model
-*/
-var flatten = module.exports.flatten = function (val) {
-    var acc = {};
-    for (var key in val) {
-        if (val[key] instanceof Object &&
-            !('_id' in val[key]) &&
-            !(val[key] instanceof Array)) {
-            var subset = flatten(val[key]);
-            for (var subkey in subset) {
-                acc[key + '.' + subkey] = subset[subkey];
-            }
-        } else {
-            acc[key] = val[key];
-        }
-    }
-    return acc;
 };
